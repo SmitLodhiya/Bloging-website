@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url('back_ground.jpeg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; 
+            font-family: Arial, sans-serif; 
+        }
+
+        .card {
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: rgba(255, 255, 255, 0.8); 
+        }
+
+        .btn-primary,
+        .btn-info,
+        .btn-danger {
+            margin-right: 5px;
+        }
+
+        .more-content {
+            display: none;
+        }
+    </style>
+    <title>Blog Website</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="mb-4">Bharat Intern Blog Website</h1>
+        <a href="/articles/new" class="btn btn-success">Create Article</a>
+
+        <% articles.forEach(article=>{%>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <%=article.title%>
+                    </h4>
+                    <div class="card-subtitle text-muted mb-2">
+                        <%=article.createdAt.toLocaleDateString() %>
+                    </div>
+                    <div class="card-text mb-2">
+                        <%=article.description.substring(0, 100)%> 
+                        <span class="more-content"><%=article.description.substring(100)%></span> 
+                    </div>
+                    <a href="#" class="btn btn-primary read-more">Read More</a> 
+                    <a href="#" class="btn btn-primary read-less" style="display:none;">Read Less</a> 
+                    <a href="articles/edit/<%= article.id%>" class="btn btn-info">Edit</a>
+                    <form action="/articles/<%=article.id %>?_method=DELETE" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </div>
+            </div>
+
+            <%})%>
+    </div>
+
+    <script>
+        document.querySelectorAll('.read-more').forEach(btn => {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                const cardBody = this.parentElement.querySelector('.card-text');
+                const moreContent = cardBody.querySelector('.more-content');
+                moreContent.style.display = 'inline';
+                this.style.display = 'none'; 
+                cardBody.querySelector('.read-less').style.display = 'inline'; 
+            });
+        });
+
+        document.querySelectorAll('.read-less').forEach(btn => {
+            btn.addEventListener('click', function (event) {
+                event.preventDefault();
+                const cardBody = this.parentElement.querySelector('.card-text');
+                const moreContent = cardBody.querySelector('.more-content');
+                moreContent.style.display = 'none';
+                cardBody.querySelector('.read-more').style.display = 'inline';
+                this.style.display = 'none'; 
+            });
+        });
+    </script>
+</body>
+
+</html>
